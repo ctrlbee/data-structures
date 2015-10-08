@@ -7,12 +7,6 @@ var extend = function(obj){
   }
 }
 
-var obj1 = {"foo": "bar", "baz": "boo"}; 
-var obj2 = {"city": "sf", "weather": "chilly"}; 
-extend(obj1, obj2);
-console.log(obj1);  
-
-
 var Stack = function() {
   // Hey! Rewrite in the new style. Your code will wind up looking very similar,
   // but try not not reference your old code in writing the new style.
@@ -45,7 +39,4 @@ var stackMethods = {
 
 var st = Stack(); 
 console.log(st.size()); 
-
-extend(Stack, stackMethods); 
-console.log(Stack); 
 
