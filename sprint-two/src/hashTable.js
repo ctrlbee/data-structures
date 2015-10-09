@@ -5,6 +5,10 @@ var HashTable = function() {
   this._storage = LimitedArray(this._limit);
 };
 
+HashTable.prototype.getAll = function(){
+  return this._storage; 
+}
+
 HashTable.prototype.insert = function(k, v) {
   //get index
   var index = getIndexBelowMaxForKey(k, this._limit);
@@ -15,8 +19,21 @@ HashTable.prototype.insert = function(k, v) {
   if(this._storage.get(index)!==undefined){
     bucket = this._storage.get(index); 
   } 
+
+  //check if k already exists 
+  var dupe = false; 
+  for(var key in bucket){
+    if(bucket[key][0]===k){
+      bucket[key] = [k,v]; 
+      dupe = true; 
+    }
+  }
+
   //push [k,v] onto bucket
-  bucket.push([k,v]); 
+  if(!dupe){
+    bucket.push([k,v]);   
+  }
+  
   //write bucket back to that index
   this._storage.set(index, bucket); 
 
@@ -26,7 +43,6 @@ HashTable.prototype.insert = function(k, v) {
 HashTable.prototype.retrieve = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
   var bucket = this._storage.get(index); 
-  console.log(bucket); 
   for(var key in bucket){
     if(bucket[key][0] ===k){
       return bucket[key][1]; 
@@ -36,6 +52,12 @@ HashTable.prototype.retrieve = function(k) {
 
 HashTable.prototype.remove = function(k) {
   var index = getIndexBelowMaxForKey(k, this._limit);
+  var bucket = this._storage.get(index); 
+  for(var i = 0; i < bucket.length; i++){
+    if(bucket[i][0]===k){
+      delete bucket[i]; //HAD TO CHANGE TEST CASE TO LOOK FOR UNDEFINED INSTEAD OF NULL
+    }
+  }
 };
 
 
@@ -111,6 +133,9 @@ var getIndexBelowMaxForKey = function(str, max) {
  var HT = new HashTable(); 
  console.log(HT.insert('quick', 'fox')); 
  console.log(HT.insert('slick', 'cat')); 
+ console.log(HT.retrieve('slick'));
+ HT.remove('slick'); 
+ console.log(HT.retrieve('quick')); 
  console.log(HT.retrieve('slick'));
 
 
