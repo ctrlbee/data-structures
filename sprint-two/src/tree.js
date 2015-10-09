@@ -35,7 +35,7 @@ var Tree = function(value) {
 
 var treeMethods = {};
 
-treeMethods.getTree = function(){
+treeMethods.getTree = function() {
   return this; 
 }
 
@@ -44,12 +44,16 @@ treeMethods.addChild = function(value) {
   this.children.push(T); 
 };
 
+function function_name(argument) {
+  // body...
+}
+
 treeMethods.contains = function(target) {
   var results = false;
   var treeTraverse = function(tree) {
     if (tree.value === target) { results = true; }; 
-    if(tree.children.length){
-      for (var i = 0; i < tree.children.length; i++){
+    if (tree.children.length) {
+      for (var i = 0; i < tree.children.length; i++) {
         treeTraverse(tree.children[i]);
       }  
     }
