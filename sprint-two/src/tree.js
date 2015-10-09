@@ -45,21 +45,18 @@ treeMethods.addChild = function(value) {
 };
 
 treeMethods.contains = function(target) {
+  var results = false;
   var treeTraverse = function(tree) {
-    if (tree.value === target) { return true; }; 
-
-    for (var i = 0; i < tree.children.length; i++){
-      if (tree.children[i].value === target) { return true; }; 
-      if (tree.children[i].children[0]){
+    if (tree.value === target) { results = true; }; 
+    if(tree.children.length){
+      for (var i = 0; i < tree.children.length; i++){
         treeTraverse(tree.children[i]);
-      }; 
+      }  
     }
-    return false; 
+    return results; 
   }
-  console.log(this); 
+  
   return treeTraverse(this);
-
-
 };
 
 

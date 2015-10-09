@@ -15,13 +15,19 @@ Graph.prototype.addNode = function(node) {
 // ------------------------
 // Return a boolean value indicating if the value passed to contains is represented in the graph.
 Graph.prototype.contains = function(node) {
+  for(var key in this.storage){
+    if(key===node.toString()){
+      return true;
+    }
+  }
+  return false; 
 };
 
 // ------------------------
 // Removes a node from the graph.
 Graph.prototype.removeNode = function(node) {
-  for (var key in node) {
-    
+  for (var key in this.storage[node]) {
+    delete this.storage[key][node]; 
   }
   delete this.storage[node]; 
 };
@@ -50,6 +56,10 @@ Graph.prototype.removeEdge = function(fromNode, toNode) {
 // ------------------------
 // Pass in a callback which will be executed on each node of the graph.
 Graph.prototype.forEachNode = function(cb) {
+  for(var key in this.storage){
+    console.log(key); 
+    cb(key); 
+  }
 };
 
 var g = new Graph(); 
@@ -57,11 +67,12 @@ g.addNode(3);
 g.addNode(4); 
 g.addEdge(3, 4); 
 console.log(g.hasEdge(3, 4));
+console.log(g.hasEdge(3, 9));
 console.log(g); 
+console.log("contains ", g.contains(4)); 
 g.removeNode(4); 
 console.log(g);
-
-console.log(g); 
+console.log(g.forEachNode(function(item){return item+1})); 
 /*
  * Complexity: What is the time complexity of the above functions?
  */
