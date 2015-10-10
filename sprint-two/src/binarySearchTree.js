@@ -125,27 +125,30 @@ bsproto.depthFirstLog = function(func){
 
 bsproto.breadthFirstSearch = function(){
   var results = []; 
+  results.push(this.value); 
 
   (function search(tree){
     var queue = new Queue(); 
-    results.push(tree.value); 
+    //results.push(tree.value); 
     if(tree.left){
-      //results.push(tree.left); 
+      results.push(tree.left.value); 
       queue.enqueue(tree.left); 
     }
     if(tree.right){
-      //results.push(tree.right); 
+      results.push(tree.right.value); 
       queue.enqueue(tree.right); 
     }
 
     //loop through queue
     console.log("size", queue.size()); 
-    for(var i = 0; i < queue.size(); i++){
-      console.log("pre-dequeue ",queue);
-      var subtree = queue.dequeue();
-      console.log("after dequeue ", queue); 
-      search(subtree);  
+
+    var subtree = queue.dequeue();
+
+    if(queue.size()>0){
+      search(subtree);   
     }
+    
+
   })(this); 
 
   return results; 
@@ -153,12 +156,11 @@ bsproto.breadthFirstSearch = function(){
 
 var bst = BinarySearchTree(5);
 bst.insert(3); 
-console.log(bst.getTree()); 
 bst.insert(1); 
-console.log(bst.getTree()); 
 bst.insert(4); 
-console.log(bst.getTree()); 
-bst.insert(22); 
+bst.insert(22);  
+bst.insert(7); 
+bst.insert(23); 
 console.log("bst: "+bst.left.left.value); 
 console.log(bst.contains(4)); 
 console.log(bst.breadthFirstSearch()); 

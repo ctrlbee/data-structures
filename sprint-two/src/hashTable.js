@@ -56,7 +56,7 @@ HashTable.prototype.remove = function(k) {
   var bucket = this._storage.get(index); 
   for(var i = 0; i < bucket.length; i++){
     if(bucket[i][0]===k){
-       bucket.splice(i,1);  //HAD TO CHANGE TEST CASE TO LOOK FOR UNDEFINED INSTEAD OF NULL
+       bucket.splice(i,1); 
        this._storage.set(index, bucket); 
     }
   }
