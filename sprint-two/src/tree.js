@@ -44,10 +44,6 @@ treeMethods.addChild = function(value) {
   this.children.push(T); 
 };
 
-function function_name(argument) {
-  // body...
-}
-
 treeMethods.contains = function(target) {
   var results = false;
   var treeTraverse = function(tree) {
