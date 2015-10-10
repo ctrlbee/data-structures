@@ -1,3 +1,26 @@
+var Queue = function(){
+  this.storage = {}; 
+  this.counter = 0; 
+}
+Queue.prototype.enqueue = function(val){
+  this.storage[this.counter] = val; 
+  this.counter++; 
+}
+Queue.prototype.dequeue = function(){
+  var results = this.storage[0];
+  delete this.storage[0];
+  for(var i = 0; i<this.counter; i++){ 
+    this.storage[i] = this.storage[i+1]; 
+  } 
+  if(this.counter>0){
+    this.counter--;   
+  }
+  return results; 
+}
+Queue.prototype.size = function(){
+  return this.counter; 
+}
+
 var BinarySearchTree = function(value) {
   var storage = Object.create(bsproto); 
   storage.value = value; 
@@ -100,16 +123,58 @@ bsproto.depthFirstLog = function(func){
   return runFunc(this); 
 }
 
+bsproto.breadthFirstSearch = function(){
+  var results = []; 
+
+  (function search(tree){
+    var queue = new Queue(); 
+    results.push(tree.value); 
+    if(tree.left){
+      //results.push(tree.left); 
+      queue.enqueue(tree.left); 
+    }
+    if(tree.right){
+      //results.push(tree.right); 
+      queue.enqueue(tree.right); 
+    }
+
+    //loop through queue
+    console.log("size", queue.size()); 
+    for(var i = 0; i < queue.size(); i++){
+      console.log("pre-dequeue ",queue);
+      var subtree = queue.dequeue();
+      console.log("after dequeue ", queue); 
+      search(subtree);  
+    }
+  })(this); 
+
+  return results; 
+}
+
 var bst = BinarySearchTree(5);
 bst.insert(3); 
 console.log(bst.getTree()); 
 bst.insert(1); 
 console.log(bst.getTree()); 
-bst.insert(8); 
-console.log(bst.getTree()); 
 bst.insert(4); 
+console.log(bst.getTree()); 
+bst.insert(22); 
 console.log("bst: "+bst.left.left.value); 
 console.log(bst.contains(4)); 
+console.log(bst.breadthFirstSearch()); 
+
+// var Q = new Queue(); 
+// Q.enqueue(4); 
+// Q.enqueue(8); 
+// Q.enqueue(9); 
+// console.log("size ", Q.size()); 
+// console.log(Q.dequeue()); 
+// console.log("size ", Q.size()); 
+// Q.enqueue(77); 
+// console.log(Q.dequeue());
+// console.log(Q.dequeue());
+// console.log(Q.dequeue());
+// console.log("size ", Q.size()); 
 
 
 /*
