@@ -1,12 +1,15 @@
-
-
 var HashTable = function() {
   this._limit = 8;
+  this._count = 0; 
   this._storage = LimitedArray(this._limit);
 };
 
 HashTable.prototype.getAll = function(){
-  return this._storage; 
+  var all = [];
+  this._storage.each(function(el){
+    all.push(el);
+  }); 
+  return all; 
 }
 
 HashTable.prototype.insert = function(k, v) {
@@ -36,8 +39,12 @@ HashTable.prototype.insert = function(k, v) {
   
   //write bucket back to that index
   this._storage.set(index, bucket); 
+  this._count++;
 
-  console.log("index ", index, " bucket", this._storage.get(index)); 
+  if(this._count > this._limit * 0.75) {
+    this._resize();
+  }
+
 };
 
 HashTable.prototype.retrieve = function(k) {
@@ -62,6 +69,30 @@ HashTable.prototype.remove = function(k) {
   }
 };
 
+HashTable.prototype._resize = function(){
+  //get the current HT values
+  var currHash = this._storage;
+
+  //change the HT size
+  var newLimit = this._limit * 2; 
+  this._limit = newLimit;
+  this._storage = LimitedArray(newLimit);
+  this._count = 0; 
+
+  currHash.each(function(bucket){
+    if(!bucket){return;}
+    //call the insert function for each element in the prev HT 
+    for(var i = 0; i < bucket.length; i++){
+      this.insert(bucket[i][0], bucket[i][1]);   
+    }
+  }.bind(this));
+
+  //console.log(currHash);
+
+  console.log('new storage ' + this.getAll());
+
+}; 
+
 
 /*
  ********** NOTE: **********
@@ -80,6 +111,9 @@ var LimitedArray = function(limit) {
   var storage = [];
 
   var limitedArray = {};
+  limitedArray.getAll = function() {
+    return storage;
+  };
   limitedArray.get = function(index) {
     checkLimit(index);
     return storage[index];
@@ -133,12 +167,17 @@ var getIndexBelowMaxForKey = function(str, max) {
 
 
  var HT = new HashTable(); 
- console.log(HT.insert('quick', 'fox')); 
- console.log(HT.insert('slick', 'cat')); 
- console.log(HT.retrieve('slick'));
- HT.remove('slick'); 
- console.log(HT.retrieve('quick')); 
- console.log(HT.retrieve('slick'));
+ HT.insert('quick', 'fox'); 
+ HT.insert('slick', 'cat'); 
+ HT.insert('lazy', 'dog'); 
+ console.log(HT.getAll()); 
+ console.log(HT._resize()); 
+ console.log(HT.getAll()); 
+
+ //console.log(HT.retrieve('slick'));
+ //HT.remove('slick'); 
+ //console.log(HT.retrieve('quick')); 
+ //console.log(HT.retrieve('slick'));
 
 
 
